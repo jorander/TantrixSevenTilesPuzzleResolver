@@ -19,6 +19,12 @@ class PlacedTantrixTileSpec extends FlatSpec with Matchers {
     a[IllegalArgumentException] should be thrownBy {
       PlacedTantrixTile(tile(1), 6)
     }
+    try {
+      PlacedTantrixTile(null, 7)
+      fail("Should have been IllegalArgumentException")
+    } catch {
+      case iae: IllegalArgumentException => assert(iae.getMessage().contains("|"))
+    }
   }
 
   it should "return the BandColor of the TileEdge at a specified position, with respect to the number of rotation steps" in {
