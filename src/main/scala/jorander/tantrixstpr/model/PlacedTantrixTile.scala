@@ -17,13 +17,15 @@ case class PlacedTantrixTile(tile: TantrixTile, nbrOfRotationSteps: Int) {
 
   private def concatErrors(fs: String*) = fs.toList.mkString("|")
   private def validatorsWithConcatenatedErrorstrings = plus(
-      (s1: ConstructorParams, s2: ConstructorParams) => s2, concatErrors)_
+    (s1: ConstructorParams, s2: ConstructorParams) => s2, concatErrors)_
 
-  private val edgePositions = List(TOP, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, TOP_LEFT)
-  private def edgeOfPlacedTile(edgeAsPlaced: TileEdge) = {
-    val edgeIndex = edgePositions.indexOf(edgeAsPlaced) - nbrOfRotationSteps
-    edgePositions(if (edgeIndex >= 0) edgeIndex else edgeIndex + 6)
+  def bandColor(edgeAsPlaced: TileEdge) = {
+    val edgePositions = List(TOP, TOP_RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, TOP_LEFT)
+    def edgeOfPlacedTile(edgeAsPlaced: TileEdge) = {
+      val edgeIndex = edgePositions.indexOf(edgeAsPlaced) - nbrOfRotationSteps
+      edgePositions(if (edgeIndex >= 0) edgeIndex else edgeIndex + 6)
+    }
+
+    tile.edgeColor(edgeOfPlacedTile(edgeAsPlaced))
   }
-
-  def bandColor(edgeAsPlaced: TileEdge) = tile.edgeColor(edgeOfPlacedTile(edgeAsPlaced))
 }
