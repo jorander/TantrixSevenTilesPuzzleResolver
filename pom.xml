@@ -24,7 +24,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>jorander</groupId>
-			<artifactId>scalarop</artifactId>
+			<artifactId>functionalvalidation</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
