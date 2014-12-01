@@ -42,7 +42,14 @@ object TantrixTile {
       LEFT_EDGE -> leftEdgeColor,
       TOP_LEFT_EDGE -> topLeftEdgeColor))
 
-  private val TILES = Map(1 -> tantrixTile(BLUE, RED, YELLOW, YELLOW, BLUE, RED))
+  private val TILES = Map(
+    1 -> tantrixTile(BLUE, RED, YELLOW, YELLOW, BLUE, RED),
+    8 -> tantrixTile(RED, YELLOW, BLUE, BLUE, RED, YELLOW),
+    17 -> tantrixTile(YELLOW, GREEN, RED, GREEN, RED, YELLOW),
+    22 -> tantrixTile(YELLOW, GREEN, RED, RED, GREEN, YELLOW),
+    34 -> tantrixTile(YELLOW, RED, YELLOW, GREEN, RED, GREEN),
+    55 -> tantrixTile(BLUE, GREEN, YELLOW, GREEN, YELLOW, BLUE),
+    56 -> tantrixTile(BLUE, YELLOW, GREEN, YELLOW, GREEN, BLUE))
 
   def tile(number: Int) = TILES.getOrElse(number, throw new IllegalArgumentException("Tile number " + number + " does not exist."))
 }
