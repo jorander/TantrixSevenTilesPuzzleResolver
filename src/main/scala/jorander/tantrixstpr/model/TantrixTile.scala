@@ -9,12 +9,12 @@ case object BLUE extends BandColor
 case object YELLOW extends BandColor
 
 sealed abstract trait TileEdge
-case object TOP extends TileEdge
-case object TOP_LEFT extends TileEdge
-case object TOP_RIGHT extends TileEdge
-case object BOTTOM extends TileEdge
-case object BOTTOM_LEFT extends TileEdge
-case object BOTTOM_RIGHT extends TileEdge
+case object TOP_EDGE extends TileEdge
+case object TOP_LEFT_EDGE extends TileEdge
+case object TOP_RIGHT_EDGE extends TileEdge
+case object BOTTOM_EDGE extends TileEdge
+case object BOTTOM_LEFT_EDGE extends TileEdge
+case object BOTTOM_RIGHT_EDGE extends TileEdge
 
 final case class TantrixTile(edgeColors: Map[TileEdge, BandColor]) {
   validation(() => if (hasThreeColorsSpecifiedForTwoEdgesEach(edgeColors)) validationOK else validationError("The tile should have three colors, specified for two edges each.")) match {
@@ -35,12 +35,12 @@ object TantrixTile {
     bottomEdgeColor: BandColor,
     bottomLeftEdgeColor: BandColor,
     topLeftEdgeColor: BandColor) =
-    TantrixTile(Map(TOP -> topEdgeColor,
-      TOP_RIGHT -> topRightEdgeColor,
-      BOTTOM_RIGHT -> bottomRightEdgeColor,
-      BOTTOM -> bottomEdgeColor,
-      BOTTOM_LEFT -> bottomLeftEdgeColor,
-      TOP_LEFT -> topLeftEdgeColor))
+    TantrixTile(Map(TOP_EDGE -> topEdgeColor,
+      TOP_RIGHT_EDGE -> topRightEdgeColor,
+      BOTTOM_RIGHT_EDGE -> bottomRightEdgeColor,
+      BOTTOM_EDGE -> bottomEdgeColor,
+      BOTTOM_LEFT_EDGE -> bottomLeftEdgeColor,
+      TOP_LEFT_EDGE -> topLeftEdgeColor))
 
   private val TILES = Map(1 -> tantrixTile(RED, BLUE, GREEN, RED, BLUE, GREEN))
 

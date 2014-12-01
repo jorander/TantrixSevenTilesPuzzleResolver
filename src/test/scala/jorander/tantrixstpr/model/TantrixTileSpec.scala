@@ -12,28 +12,28 @@ class TantrixTileSpec extends FlatSpec with Matchers {
       .edgeColors.size should be(6)
 
     a[IllegalArgumentException] should be thrownBy {
-      TantrixTile(Map(TOP -> RED, TOP_RIGHT -> RED))
+      TantrixTile(Map(TOP_EDGE -> RED, TOP_RIGHT_EDGE -> RED))
     }
   }
 
   it should "be constructed with three different colors" in {
     a[IllegalArgumentException] should be thrownBy {
-      TantrixTile(Map(TOP -> RED, TOP_RIGHT -> RED,
-        BOTTOM_RIGHT -> RED, BOTTOM -> RED,
-        BOTTOM_LEFT -> GREEN, TOP_LEFT -> GREEN))
+      TantrixTile(Map(TOP_EDGE -> RED, TOP_RIGHT_EDGE -> RED,
+        BOTTOM_RIGHT_EDGE -> RED, BOTTOM_EDGE -> RED,
+        BOTTOM_LEFT_EDGE -> GREEN, TOP_LEFT_EDGE -> GREEN))
     }
     a[IllegalArgumentException] should be thrownBy {
-      TantrixTile(Map(TOP -> RED, TOP_RIGHT -> RED,
-        BOTTOM_RIGHT -> BLUE, BOTTOM -> YELLOW,
-        BOTTOM_LEFT -> GREEN, TOP_LEFT -> GREEN))
+      TantrixTile(Map(TOP_EDGE -> RED, TOP_RIGHT_EDGE -> RED,
+        BOTTOM_RIGHT_EDGE -> BLUE, BOTTOM_EDGE -> YELLOW,
+        BOTTOM_LEFT_EDGE -> GREEN, TOP_LEFT_EDGE -> GREEN))
     }
   }
 
   it should "be constructed with two edges of each color" in {
     a[IllegalArgumentException] should be thrownBy {
-      TantrixTile(Map(TOP -> RED, TOP_RIGHT -> RED,
-        BOTTOM_RIGHT -> BLUE, BOTTOM -> BLUE,
-        BOTTOM_LEFT -> BLUE, TOP_LEFT -> GREEN))
+      TantrixTile(Map(TOP_EDGE -> RED, TOP_RIGHT_EDGE -> RED,
+        BOTTOM_RIGHT_EDGE -> BLUE, BOTTOM_EDGE -> BLUE,
+        BOTTOM_LEFT_EDGE -> BLUE, TOP_LEFT_EDGE -> GREEN))
     }
   }
 
@@ -46,6 +46,6 @@ class TantrixTileSpec extends FlatSpec with Matchers {
   }
 
   it should "return the BandColor for a specified TileEdge" in {
-    tile(1) edgeColor BOTTOM_LEFT should be === (BLUE)
+    tile(1) edgeColor BOTTOM_LEFT_EDGE should be === (BLUE)
   }
 }
