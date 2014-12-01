@@ -3,7 +3,7 @@ package jorander.tantrixstpr.model
 import jorander.functionalvalidation._
 
 case class PlacedTantrixTile(tile: TantrixTile, nbrOfRotationSteps: Int) {
-  validate(
+  validation(
     () => mustNotBeNull(tile, "Tile"),
     () => if (nbrOfRotationSteps >= 0 && nbrOfRotationSteps <= 5)
       validationOK else validationError("Number of Rotation Steps must be between 0 and 5 (inclusive)")) match {
