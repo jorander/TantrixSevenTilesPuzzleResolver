@@ -9,10 +9,10 @@ case object BLUE extends BandColor
 case object YELLOW extends BandColor
 
 sealed abstract trait TileEdge
-case object TOP_EDGE extends TileEdge
 case object TOP_LEFT_EDGE extends TileEdge
 case object TOP_RIGHT_EDGE extends TileEdge
-case object BOTTOM_EDGE extends TileEdge
+case object RIGHT_EDGE extends TileEdge
+case object LEFT_EDGE extends TileEdge
 case object BOTTOM_LEFT_EDGE extends TileEdge
 case object BOTTOM_RIGHT_EDGE extends TileEdge
 
@@ -29,20 +29,20 @@ final case class TantrixTile(edgeColors: Map[TileEdge, BandColor]) {
 }
 
 object TantrixTile {
-  def tantrixTile(topEdgeColor: BandColor,
-    topRightEdgeColor: BandColor,
+  def tantrixTile(topRightEdgeColor: BandColor,
+    rightEdgeColor: BandColor,
     bottomRightEdgeColor: BandColor,
-    bottomEdgeColor: BandColor,
     bottomLeftEdgeColor: BandColor,
+    leftEdgeColor: BandColor,
     topLeftEdgeColor: BandColor) =
-    TantrixTile(Map(TOP_EDGE -> topEdgeColor,
-      TOP_RIGHT_EDGE -> topRightEdgeColor,
+    TantrixTile(Map(TOP_RIGHT_EDGE -> topRightEdgeColor,
+      RIGHT_EDGE -> rightEdgeColor,
       BOTTOM_RIGHT_EDGE -> bottomRightEdgeColor,
-      BOTTOM_EDGE -> bottomEdgeColor,
       BOTTOM_LEFT_EDGE -> bottomLeftEdgeColor,
+      LEFT_EDGE -> leftEdgeColor,
       TOP_LEFT_EDGE -> topLeftEdgeColor))
 
-  private val TILES = Map(1 -> tantrixTile(RED, BLUE, GREEN, RED, BLUE, GREEN))
+  private val TILES = Map(1 -> tantrixTile(BLUE, RED, YELLOW, YELLOW, BLUE, RED))
 
   def tile(number: Int) = TILES.getOrElse(number, throw new IllegalArgumentException("Tile number " + number + " does not exist."))
 }

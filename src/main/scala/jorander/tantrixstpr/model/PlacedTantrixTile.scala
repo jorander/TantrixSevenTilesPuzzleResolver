@@ -12,7 +12,7 @@ case class PlacedTantrixTile(tile: TantrixTile, nbrOfRotationSteps: Int) {
     }
 
   def bandColor(edgeAsPlaced: TileEdge) = {
-    val edgePositions = List(TOP_EDGE, TOP_RIGHT_EDGE, BOTTOM_RIGHT_EDGE, BOTTOM_EDGE, BOTTOM_LEFT_EDGE, TOP_LEFT_EDGE)
+    val edgePositions = List(TOP_RIGHT_EDGE, RIGHT_EDGE, BOTTOM_RIGHT_EDGE, BOTTOM_LEFT_EDGE, LEFT_EDGE, TOP_LEFT_EDGE)
     def edgeOfPlacedTile(edgeAsPlaced: TileEdge) = {
       val edgeIndex = edgePositions.indexOf(edgeAsPlaced) - nbrOfRotationSteps
       edgePositions(if (edgeIndex >= 0) edgeIndex else edgeIndex + 6)
