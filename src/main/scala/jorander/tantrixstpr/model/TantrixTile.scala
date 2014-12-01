@@ -1,5 +1,7 @@
 package jorander.tantrixstpr.model
 
+import jorander.functionalvalidation._
+
 sealed abstract trait BandColor
 case object RED extends BandColor
 case object GREEN extends BandColor
@@ -15,7 +17,10 @@ case object BOTTOM_LEFT extends TileEdge
 case object BOTTOM_RIGHT extends TileEdge
 
 final case class TantrixTile(edgeColors: Map[TileEdge, BandColor]) {
-  if (!hasThreeColorsSpecifiedForTwoEdgesEach(edgeColors)) throw new IllegalArgumentException("The tile should have three colors, specified for two edges each.")
+  validation(() => if (hasThreeColorsSpecifiedForTwoEdgesEach(edgeColors)) validationOK else validationError("The tile should have three colors, specified for two edges each.")) match {
+    case None => /*Do nothing since assignment is implicit */
+    case Some(s) => throw new IllegalArgumentException(s.mkString("|"))
+  }
 
   private def hasThreeColorsSpecifiedForTwoEdgesEach(edgeColors: Map[TileEdge, BandColor]) =
     List(RED, GREEN, BLUE, YELLOW).map(c => edgeColors.values.count(_ == c)).count(_ == 2) == 3
