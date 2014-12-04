@@ -5,7 +5,7 @@ import org.scalatest.FlatSpec
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
-import jorander.tantrixstpr.model.SevenTilesPuzzel._
+import jorander.tantrixstpr.model.SevenTilesPuzzle._
 import jorander.tantrixstpr.model.TantrixTile._
 
 @RunWith(classOf[JUnitRunner])
