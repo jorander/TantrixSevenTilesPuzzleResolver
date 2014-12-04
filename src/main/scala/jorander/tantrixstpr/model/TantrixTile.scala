@@ -16,7 +16,7 @@ case object LEFT_EDGE extends TileEdge
 case object BOTTOM_LEFT_EDGE extends TileEdge
 case object BOTTOM_RIGHT_EDGE extends TileEdge
 
-final case class TantrixTile(edgeColors: Map[TileEdge, BandColor]) {
+final case class TantrixTile(tileNumber: Int, edgeColors: Map[TileEdge, BandColor]) {
   validation(() => if (hasThreeColorsSpecifiedForTwoEdgesEach(edgeColors)) validationOK else validationError("The tile should have three colors, specified for two edges each.")) match {
     case None => /*Do nothing since assignment is implicit */
     case Some(s) => throw new IllegalArgumentException(s.mkString("|"))
@@ -26,16 +26,19 @@ final case class TantrixTile(edgeColors: Map[TileEdge, BandColor]) {
     List(RED, GREEN, BLUE, YELLOW).map(c => edgeColors.values.count(_ == c)).count(_ == 2) == 3
 
   def edgeColor(edge: TileEdge) = edgeColors getOrElse (edge, throw new IllegalStateException("This should never happen. Missing BandColor for " + edge))
+
+  override def toString = "TantrixTile(tileNumber: " + tileNumber + ")"
 }
 
 object TantrixTile {
-  def tantrixTile(topRightEdgeColor: BandColor,
+  def tantrixTile(tileNumber: Int,
+    topRightEdgeColor: BandColor,
     rightEdgeColor: BandColor,
     bottomRightEdgeColor: BandColor,
     bottomLeftEdgeColor: BandColor,
     leftEdgeColor: BandColor,
     topLeftEdgeColor: BandColor) =
-    TantrixTile(Map(TOP_RIGHT_EDGE -> topRightEdgeColor,
+    TantrixTile(tileNumber, Map(TOP_RIGHT_EDGE -> topRightEdgeColor,
       RIGHT_EDGE -> rightEdgeColor,
       BOTTOM_RIGHT_EDGE -> bottomRightEdgeColor,
       BOTTOM_LEFT_EDGE -> bottomLeftEdgeColor,
@@ -43,13 +46,13 @@ object TantrixTile {
       TOP_LEFT_EDGE -> topLeftEdgeColor))
 
   private val TILES = Map(
-    1 -> tantrixTile(BLUE, RED, YELLOW, YELLOW, BLUE, RED),
-    8 -> tantrixTile(RED, YELLOW, BLUE, BLUE, RED, YELLOW),
-    17 -> tantrixTile(YELLOW, GREEN, RED, GREEN, RED, YELLOW),
-    22 -> tantrixTile(YELLOW, GREEN, RED, RED, GREEN, YELLOW),
-    34 -> tantrixTile(YELLOW, RED, YELLOW, GREEN, RED, GREEN),
-    55 -> tantrixTile(BLUE, GREEN, YELLOW, GREEN, YELLOW, BLUE),
-    56 -> tantrixTile(BLUE, YELLOW, GREEN, YELLOW, GREEN, BLUE))
+    1 -> tantrixTile(1, BLUE, RED, YELLOW, YELLOW, BLUE, RED),
+    8 -> tantrixTile(8, RED, YELLOW, BLUE, BLUE, RED, YELLOW),
+    17 -> tantrixTile(17, YELLOW, GREEN, RED, GREEN, RED, YELLOW),
+    22 -> tantrixTile(22, YELLOW, GREEN, RED, RED, GREEN, YELLOW),
+    34 -> tantrixTile(34, YELLOW, RED, YELLOW, GREEN, RED, GREEN),
+    55 -> tantrixTile(55, BLUE, GREEN, YELLOW, GREEN, YELLOW, BLUE),
+    56 -> tantrixTile(56, BLUE, YELLOW, GREEN, YELLOW, GREEN, BLUE))
 
   def tile(number: Int) = TILES.getOrElse(number, throw new IllegalArgumentException("Tile number " + number + " does not exist."))
 }

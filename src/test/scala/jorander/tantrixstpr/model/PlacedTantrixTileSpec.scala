@@ -28,7 +28,7 @@ class PlacedTantrixTileSpec extends FlatSpec with Matchers {
   }
 
   it should "return the BandColor of the TileEdge at a specified position, with respect to the number of rotation steps" in {
-    val tile = tantrixTile(BLUE, RED, YELLOW, YELLOW, BLUE, RED)
+    val tile = tantrixTile(99, BLUE, RED, YELLOW, YELLOW, BLUE, RED)
     PlacedTantrixTile(tile, 0).bandColor(TOP_RIGHT_EDGE) should be === (BLUE)
     PlacedTantrixTile(tile, 0).bandColor(TOP_LEFT_EDGE) should be === (RED)
     PlacedTantrixTile(tile, 2).bandColor(TOP_LEFT_EDGE) should be === (YELLOW)
