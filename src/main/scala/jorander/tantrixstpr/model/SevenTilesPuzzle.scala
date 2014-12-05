@@ -9,7 +9,7 @@ case object RIGHT_POSITION extends TilePosition
 case object BOTTOM_RIGHT_POSITION extends TilePosition
 case object BOTTOM_LEFT_POSITION extends TilePosition
 
-case class SevenTilesPuzzle(placedTiles: Map[TilePosition, PlacedTantrixTile], unplacedTiles: List[TantrixTile])
+case class SevenTilesPuzzle(placedTiles: Map[TilePosition, PlacedTantrixTile], unplacedTiles: Set[TantrixTile])
 
 object SevenTilesPuzzle {
   private val tileIntersectionsToCheck: Map[TilePosition, List[(TileEdge, (TilePosition, TileEdge))]] = Map(
