@@ -20,7 +20,7 @@ object SevenTilesPuzzleResolver {
   implicit def data2ComposableSetData[A](d: Set[A]) = ComposableSetData(d)
 
   def main(args: Array[String]) {
-    resolvePuzzle(Set(tile(1), tile(17), tile(8), tile(22), tile(34), tile(55), tile(56)))
+    args.map(_.toInt).toSet.map((t: Int) => tile(t)) ->> resolvePuzzle
   }
 
   def resolvePuzzle(tiles: Set[TantrixTile]) {
