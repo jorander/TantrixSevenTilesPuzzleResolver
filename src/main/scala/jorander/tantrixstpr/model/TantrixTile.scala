@@ -47,10 +47,17 @@ object TantrixTile {
 
   private val TILES = Map(
     1 -> tantrixTile(1, BLUE, RED, YELLOW, YELLOW, BLUE, RED),
+    7 -> tantrixTile(7, YELLOW, RED, BLUE, BLUE, YELLOW, RED),
     8 -> tantrixTile(8, RED, YELLOW, BLUE, BLUE, RED, YELLOW),
+    11 -> tantrixTile(11, RED, BLUE, YELLOW, BLUE, YELLOW, RED),
+    13 -> tantrixTile(13, BLUE, YELLOW, RED, RED, YELLOW, BLUE),
     17 -> tantrixTile(17, YELLOW, GREEN, RED, GREEN, RED, YELLOW),
+    18 -> tantrixTile(18, YELLOW, RED, GREEN, RED, GREEN, YELLOW),
     22 -> tantrixTile(22, YELLOW, GREEN, RED, RED, GREEN, YELLOW),
+    23 -> tantrixTile(23, GREEN, YELLOW, YELLOW, RED, RED, GREEN),
+    32 -> tantrixTile(32, YELLOW, GREEN, YELLOW, RED, GREEN, RED),
     34 -> tantrixTile(34, YELLOW, RED, YELLOW, GREEN, RED, GREEN),
+    38 -> tantrixTile(38, BLUE, RED, GREEN, RED, GREEN, BLUE),
     55 -> tantrixTile(55, BLUE, GREEN, YELLOW, GREEN, YELLOW, BLUE),
     56 -> tantrixTile(56, BLUE, YELLOW, GREEN, YELLOW, GREEN, BLUE))
 
