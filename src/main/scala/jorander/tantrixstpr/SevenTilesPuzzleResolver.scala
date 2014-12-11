@@ -19,7 +19,21 @@ object SevenTilesPuzzleResolver {
 
   implicit def data2ComposableSetData[A](d: Set[A]) = ComposableSetData(d)
 
-  private def resolvePuzzle(tiles: Set[TantrixTile]) {
+  def main(args: Array[String]) {
+    resolvePuzzle(Set(tile(1), tile(17), tile(8), tile(22), tile(34), tile(55), tile(56)))
+  }
+
+  def resolvePuzzle(tiles: Set[TantrixTile]) {
+
+    tiles ->>
+      startPuzzlesWithTryingAllTilesInCenterPosition ->> logProgress(CENTER_POSITION) ->>
+      placeNextTileInPuzzles(TOP_RIGHT_POSITION) ->> logProgress(TOP_RIGHT_POSITION) ->>
+      placeNextTileInPuzzles(RIGHT_POSITION) ->> logProgress(RIGHT_POSITION) ->>
+      placeNextTileInPuzzles(BOTTOM_RIGHT_POSITION) ->> logProgress(BOTTOM_RIGHT_POSITION) ->>
+      placeNextTileInPuzzles(BOTTOM_LEFT_POSITION) ->> logProgress(BOTTOM_LEFT_POSITION) ->>
+      placeNextTileInPuzzles(LEFT_POSITION) ->> logProgress(LEFT_POSITION) ->>
+      placeNextTileInPuzzles(TOP_LEFT_POSITION) ->> logProgress(TOP_LEFT_POSITION) ->>
+      printSolutions
 
     def placeNextTileInPuzzle(nextPosition: TilePosition)(puzzle: SevenTilesPuzzle) = {
       (for {
@@ -62,21 +76,5 @@ object SevenTilesPuzzleResolver {
         case _ =>
       })
     }
-
-    tiles ->>
-      startPuzzlesWithTryingAllTilesInCenterPosition ->> logProgress(CENTER_POSITION) ->>
-      placeNextTileInPuzzles(TOP_RIGHT_POSITION) ->> logProgress(TOP_RIGHT_POSITION) ->>
-      placeNextTileInPuzzles(RIGHT_POSITION) ->> logProgress(RIGHT_POSITION) ->>
-      placeNextTileInPuzzles(BOTTOM_RIGHT_POSITION) ->> logProgress(BOTTOM_RIGHT_POSITION) ->>
-      placeNextTileInPuzzles(BOTTOM_LEFT_POSITION) ->> logProgress(BOTTOM_LEFT_POSITION) ->>
-      placeNextTileInPuzzles(LEFT_POSITION) ->> logProgress(LEFT_POSITION) ->>
-      placeNextTileInPuzzles(TOP_LEFT_POSITION) ->> logProgress(TOP_LEFT_POSITION) ->>
-      printSolutions
-
   }
-
-  def main(args: Array[String]) {
-    resolvePuzzle(Set(tile(1), tile(17), tile(8), tile(22), tile(34), tile(55), tile(56)))
-  }
-
 }
