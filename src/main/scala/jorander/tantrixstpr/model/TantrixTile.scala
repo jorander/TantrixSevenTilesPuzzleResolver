@@ -62,4 +62,6 @@ object TantrixTile {
     56 -> tantrixTile(56, BLUE, YELLOW, GREEN, YELLOW, GREEN, BLUE))
 
   def tile(number: Int) = TILES.getOrElse(number, throw new IllegalArgumentException("Tile number " + number + " does not exist."))
+  
+  def allTiles = TILES.values.toSet
 }
