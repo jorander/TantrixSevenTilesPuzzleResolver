@@ -20,47 +20,9 @@ object SevenTilesPuzzleResolver {
   implicit def data2ComposableSetData[A](d: Set[A]) = ComposableSetData(d)
 
   def main(args: Array[String]) {
-    args.map(_.toInt).toSet.map((t: Int) => tile(t)) ->> resolvePuzzle
-  }
+    args.map(_.toInt).toSet.map((t: Int) => tile(t)) ->> resolvePuzzle(logProgress) ->> printSolutions
 
-  def resolvePuzzle(tiles: Set[TantrixTile]) {
-
-    tiles ->>
-      startPuzzlesWithTryingAllTilesInCenterPosition ->> logProgress(CENTER_POSITION) ->>
-      placeNextTileInPuzzles(TOP_RIGHT_POSITION) ->> logProgress(TOP_RIGHT_POSITION) ->>
-      placeNextTileInPuzzles(RIGHT_POSITION) ->> logProgress(RIGHT_POSITION) ->>
-      placeNextTileInPuzzles(BOTTOM_RIGHT_POSITION) ->> logProgress(BOTTOM_RIGHT_POSITION) ->>
-      placeNextTileInPuzzles(BOTTOM_LEFT_POSITION) ->> logProgress(BOTTOM_LEFT_POSITION) ->>
-      placeNextTileInPuzzles(LEFT_POSITION) ->> logProgress(LEFT_POSITION) ->>
-      placeNextTileInPuzzles(TOP_LEFT_POSITION) ->> logProgress(TOP_LEFT_POSITION) ->>
-      printSolutions
-
-    def placeNextTileInPuzzle(nextPosition: TilePosition)(puzzle: SevenTilesPuzzle) = {
-      (for {
-        tile <- puzzle.unplacedTiles.toList
-        nbrOfRotationSteps <- Range(0, 5)
-        if (isNewTilePlacementValid(puzzle.placedTiles, nextPosition, PlacedTantrixTile(tile, nbrOfRotationSteps)))
-      } yield SevenTilesPuzzle(puzzle.placedTiles + (nextPosition -> PlacedTantrixTile(tile, nbrOfRotationSteps)),
-        puzzle.unplacedTiles diff Set(tile))) match {
-        case Nil => puzzle ->> fail
-        case possibleSolutions => possibleSolutions ->> succeed
-      }
-    }
-
-    def startPuzzlesWithTryingAllTilesInCenterPosition(tiles: Set[TantrixTile]) =
-      tiles.toList.map {
-        (tile) => SevenTilesPuzzle(Map(CENTER_POSITION -> PlacedTantrixTile(tile, 0)), tiles diff Set(tile)) ->> succeed
-      }
-
-    def placeNextTileInPuzzles(nextPosition: TilePosition)(partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) =
-      partialPossibleSolutions.map(_ ->> bind(placeNextTileInPuzzle(nextPosition)))
-        .flatMap(_ match {
-          case Success(l) => l map (_ ->> succeed)
-          case Failure(f: SevenTilesPuzzle) => List(f ->> fail)
-          case default => throw new IllegalArgumentException("Unknown object typ: " + default)
-        })
-
-    def logProgress(lastPosition: TilePosition)(partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) = {
+    def logProgress(lastPosition: TilePosition, partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) = {
       partialPossibleSolutions.foldLeft((0, 0))((res, possibleSolution) => possibleSolution match {
         case Success(_) => (res._1 + 1, res._2)
         case Failure(_) => (res._1, res._2 + 1)
@@ -77,4 +39,44 @@ object SevenTilesPuzzleResolver {
       })
     }
   }
+  
+  val NO_LOGGING = (lastPosition: TilePosition, partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) => partialPossibleSolutions
+
+  def resolvePuzzle(logFunc: (TilePosition, List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) => List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]])(tiles: Set[TantrixTile]) = {
+    val logFuncPartial = (tilePosition: TilePosition) => logFunc(tilePosition, _: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]])
+
+    tiles ->>
+      startPuzzlesWithTryingAllTilesInCenterPosition ->> logFuncPartial(CENTER_POSITION) ->>
+      placeNextTileInPuzzles(TOP_RIGHT_POSITION) ->> logFuncPartial(TOP_RIGHT_POSITION) ->>
+      placeNextTileInPuzzles(RIGHT_POSITION) ->> logFuncPartial(RIGHT_POSITION) ->>
+      placeNextTileInPuzzles(BOTTOM_RIGHT_POSITION) ->> logFuncPartial(BOTTOM_RIGHT_POSITION) ->>
+      placeNextTileInPuzzles(BOTTOM_LEFT_POSITION) ->> logFuncPartial(BOTTOM_LEFT_POSITION) ->>
+      placeNextTileInPuzzles(LEFT_POSITION) ->> logFuncPartial(LEFT_POSITION) ->>
+      placeNextTileInPuzzles(TOP_LEFT_POSITION) ->> logFuncPartial(TOP_LEFT_POSITION)
+  }
+
+  private def placeNextTileInPuzzle(nextPosition: TilePosition)(puzzle: SevenTilesPuzzle) = {
+    (for {
+      tile <- puzzle.unplacedTiles.toList
+      nbrOfRotationSteps <- Range(0, 5)
+      if (isNewTilePlacementValid(puzzle.placedTiles, nextPosition, PlacedTantrixTile(tile, nbrOfRotationSteps)))
+    } yield SevenTilesPuzzle(puzzle.placedTiles + (nextPosition -> PlacedTantrixTile(tile, nbrOfRotationSteps)),
+      puzzle.unplacedTiles diff Set(tile))) match {
+      case Nil => puzzle ->> fail
+      case possibleSolutions => possibleSolutions ->> succeed
+    }
+  }
+
+  private def startPuzzlesWithTryingAllTilesInCenterPosition(tiles: Set[TantrixTile]) =
+    tiles.toList.map {
+      (tile) => SevenTilesPuzzle(Map(CENTER_POSITION -> PlacedTantrixTile(tile, 0)), tiles diff Set(tile)) ->> succeed
+    }
+
+  private def placeNextTileInPuzzles(nextPosition: TilePosition)(partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) =
+    partialPossibleSolutions.map(_ ->> bind(placeNextTileInPuzzle(nextPosition)))
+      .flatMap(_ match {
+        case Success(l) => l map (_ ->> succeed)
+        case Failure(f: SevenTilesPuzzle) => List(f ->> fail)
+        case default => throw new IllegalArgumentException("Unknown object typ: " + default)
+      })
 }
