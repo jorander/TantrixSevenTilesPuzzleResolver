@@ -12,7 +12,7 @@ object SevenTilesPuzzleAnalysis {
   def main(args: Array[String]) {
 
     def analyzePuzzleSolutions(tiles: Set[TantrixTile]) = SevenTilesPuzzleAnalysis(tiles,
-      (tiles ->> resolvePuzzle(NO_LOGGING)).foldLeft(0)((nbrOfSolutions, possibleSolution) => possibleSolution match {
+      (tiles.toStream ->> resolvePuzzle(NO_LOGGING)).foldLeft(0)((nbrOfSolutions, possibleSolution) => possibleSolution match {
         case Success(_) => nbrOfSolutions + 1
         case _ => nbrOfSolutions
       }))

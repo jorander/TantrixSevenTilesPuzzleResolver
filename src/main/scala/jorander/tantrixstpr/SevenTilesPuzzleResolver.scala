@@ -7,22 +7,16 @@ import SevenTilesPuzzle._
 
 object SevenTilesPuzzleResolver {
 
-  sealed case class ComposableListData[A](d: List[A]) {
-    def ->>[B](f: List[A] => B) = f(d)
+  sealed case class ComposableStreamData[A](d: Stream[A]) {
+    def ->>[B](f: Stream[A] => B) = f(d)
   }
 
-  implicit def data2ComposableListData[A](d: List[A]) = ComposableListData(d)
-
-  sealed case class ComposableSetData[A](d: Set[A]) {
-    def ->>[B](f: Set[A] => B) = f(d)
-  }
-
-  implicit def data2ComposableSetData[A](d: Set[A]) = ComposableSetData(d)
+  implicit def data2ComposableStreamData[A](d: Stream[A]) = ComposableStreamData(d)
 
   def main(args: Array[String]) {
-    args.map(_.toInt).toSet.map((t: Int) => tile(t)) ->> resolvePuzzle(logProgress) ->> printSolutions
+    args.toStream.map(_.toInt).map((t: Int) => tile(t)) ->> resolvePuzzle(logProgress)_->> printSolutions  
 
-    def logProgress(lastPosition: TilePosition, partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) = {
+    def logProgress(lastPosition: TilePosition, partialPossibleSolutions: Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) = {
       partialPossibleSolutions.foldLeft((0, 0))((res, possibleSolution) => possibleSolution match {
         case Success(_) => (res._1 + 1, res._2)
         case Failure(_) => (res._1, res._2 + 1)
@@ -32,7 +26,7 @@ object SevenTilesPuzzleResolver {
       partialPossibleSolutions
     }
 
-    def printSolutions(solutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) {
+    def printSolutions(solutions: Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) {
       solutions.foreach(_ match {
         case Success(s) => Console.println("Success: " + s)
         case _ =>
@@ -40,10 +34,10 @@ object SevenTilesPuzzleResolver {
     }
   }
   
-  val NO_LOGGING = (lastPosition: TilePosition, partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) => partialPossibleSolutions
+  val NO_LOGGING = (lastPosition: TilePosition, partialPossibleSolutions: Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) => partialPossibleSolutions
 
-  def resolvePuzzle(logFunc: (TilePosition, List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) => List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]])(tiles: Set[TantrixTile]) = {
-    val logFuncPartial = (tilePosition: TilePosition) => logFunc(tilePosition, _: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]])
+  def resolvePuzzle(logFunc: (TilePosition, Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) => Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]])(tiles: Stream[TantrixTile]) = {
+    val logFuncPartial = (tilePosition: TilePosition) => logFunc(tilePosition, _: Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]])
 
     tiles ->>
       startPuzzlesWithTryingAllTilesInCenterPosition ->> logFuncPartial(CENTER_POSITION) ->>
@@ -63,16 +57,16 @@ object SevenTilesPuzzleResolver {
     } yield SevenTilesPuzzle(puzzle.placedTiles + (nextPosition -> PlacedTantrixTile(tile, nbrOfRotationSteps)),
       puzzle.unplacedTiles diff Set(tile))) match {
       case Nil => puzzle ->> fail
-      case possibleSolutions => possibleSolutions ->> succeed
+      case possibleSolutions => possibleSolutions.toStream ->> succeed
     }
   }
 
-  private def startPuzzlesWithTryingAllTilesInCenterPosition(tiles: Set[TantrixTile]) =
-    tiles.toList.map {
-      (tile) => SevenTilesPuzzle(Map(CENTER_POSITION -> PlacedTantrixTile(tile, 0)), tiles diff Set(tile)) ->> succeed
+  private def startPuzzlesWithTryingAllTilesInCenterPosition(tiles: Stream[TantrixTile]) =
+    tiles.map {
+      (tile) => SevenTilesPuzzle(Map(CENTER_POSITION -> PlacedTantrixTile(tile, 0)), tiles.toSet diff Set(tile)) ->> succeed
     }
 
-  private def placeNextTileInPuzzles(nextPosition: TilePosition)(partialPossibleSolutions: List[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) =
+  private def placeNextTileInPuzzles(nextPosition: TilePosition)(partialPossibleSolutions: Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) =
     partialPossibleSolutions.map(_ ->> bind(placeNextTileInPuzzle(nextPosition)))
       .flatMap(_ match {
         case Success(l) => l map (_ ->> succeed)
