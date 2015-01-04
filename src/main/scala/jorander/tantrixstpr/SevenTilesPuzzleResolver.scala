@@ -7,12 +7,6 @@ import SevenTilesPuzzle._
 
 object SevenTilesPuzzleResolver {
 
-  sealed case class ComposableStreamData[A](d: Stream[A]) {
-    def ->>[B](f: Stream[A] => B) = f(d)
-  }
-
-  implicit def data2ComposableStreamData[A](d: Stream[A]) = ComposableStreamData(d)
-
   def main(args: Array[String]) {
     args.toStream.map(_.toInt).map((t: Int) => tile(t)) ->> resolvePuzzle(logProgress)_->> printSolutions  
 
@@ -69,7 +63,7 @@ object SevenTilesPuzzleResolver {
   private def placeNextTileInPuzzles(nextPosition: TilePosition)(partialPossibleSolutions: Stream[TwoTrackResult[SevenTilesPuzzle, SevenTilesPuzzle]]) =
     partialPossibleSolutions.map(_ ->> bind(placeNextTileInPuzzle(nextPosition)))
       .flatMap(_ match {
-        case Success(l) => l map (_ ->> succeed)
+        case Success(s) => s map (_ ->> succeed)
         case Failure(f: SevenTilesPuzzle) => List(f ->> fail)
         case default => throw new IllegalArgumentException("Unknown object typ: " + default)
       })
