@@ -49,6 +49,7 @@ object TantrixTile {
     1 -> tantrixTile(1, BLUE, RED, YELLOW, YELLOW, BLUE, RED),
     7 -> tantrixTile(7, YELLOW, RED, BLUE, BLUE, YELLOW, RED),
     8 -> tantrixTile(8, RED, YELLOW, BLUE, BLUE, RED, YELLOW),
+    9 -> tantrixTile(9, YELLOW, RED, YELLOW, BLUE, RED, BLUE),
     11 -> tantrixTile(11, RED, BLUE, YELLOW, BLUE, YELLOW, RED),
     13 -> tantrixTile(13, BLUE, YELLOW, RED, RED, YELLOW, BLUE),
     17 -> tantrixTile(17, YELLOW, GREEN, RED, GREEN, RED, YELLOW),
@@ -58,6 +59,8 @@ object TantrixTile {
     32 -> tantrixTile(32, YELLOW, GREEN, YELLOW, RED, GREEN, RED),
     34 -> tantrixTile(34, YELLOW, RED, YELLOW, GREEN, RED, GREEN),
     38 -> tantrixTile(38, BLUE, RED, GREEN, RED, GREEN, BLUE),
+    40 -> tantrixTile(40, GREEN, BLUE, GREEN, RED, BLUE, RED),
+    44 -> tantrixTile(44, GREEN, YELLOW, GREEN, BLUE, YELLOW, BLUE),
     55 -> tantrixTile(55, BLUE, GREEN, YELLOW, GREEN, YELLOW, BLUE),
     56 -> tantrixTile(56, BLUE, YELLOW, GREEN, YELLOW, GREEN, BLUE))
 
