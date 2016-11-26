@@ -46,7 +46,7 @@ object SevenTilesPuzzleResolver {
   private def placeNextTileInPuzzle(nextPosition: TilePosition)(puzzle: SevenTilesPuzzle) = {
     (for {
       tile <- puzzle.unplacedTiles.toList
-      nbrOfRotationSteps <- Range(0, 5)
+      nbrOfRotationSteps <- Range.inclusive(0, 5)
       if (isNewTilePlacementValid(puzzle.placedTiles, nextPosition, PlacedTantrixTile(tile, nbrOfRotationSteps)))
     } yield SevenTilesPuzzle(puzzle.placedTiles + (nextPosition -> PlacedTantrixTile(tile, nbrOfRotationSteps)),
       puzzle.unplacedTiles diff Set(tile))) match {
